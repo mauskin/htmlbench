@@ -5,6 +5,7 @@
 
 // The only function that is being exported return an Element object.
 // Converting it to string will return its HTML representation.
+
 function empty() {
     return Object.create(null);
 }
@@ -22,6 +23,7 @@ const void_elements = populate([
 ]);
 
 // Turns an object holding attributes into an attributes string.
+
 function stringify_atts(container) {
     if (Object.keys(container).length === 0) {
         return "";
@@ -36,32 +38,29 @@ function stringify_atts(container) {
 }
 
 // Turns an element into HTML string.
+
 function stringify(node) {
     return function () {
         const attributes = stringify_atts(node.attributes);
         return `<${node.tagName}${attributes}>` + (
             void_elements[node.tagName]
             ? ""
-            : node.tagName
+            : `\n${node.children.join("\n")}\n</${node.tagName}>`
         );
     };
 }
 
-function setAttribute(attributes) {
-    return function (name, value) {
-        attributes[name] = value;
-    };
-}
-
 // Element instance constructor.
+
 function create(name) {
+    const node = empty();
     const attributes = {};
     const children = [];
-    const node = empty();
+
     node.tagName = name;
     node.attributes = attributes;
     node.children = children;
-    node.setAttribute = setAttribute(attributes);
+
     node.valueOf = stringify(node);
 
     return Object.freeze(node);
