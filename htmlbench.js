@@ -55,17 +55,34 @@ function stringify(element) {
 
 const rg_element_name = /^[a-zA-Z][0-9a-zA-Z]/;
 
-function create(name) {
-    if (!(rg_element_name).test(name)) {
-        throw new Error("Bad symbols in the name");
-    }
-    const element = empty();
-    const attributes = {};
-    const children = [];
+const rg_custom_element_name = /^[a-z][\-.0-9_a-z\u{B7}\u{C0}-\u{D6}\u{D8}-\u{F6}\u{F8}-\u{37D}\u{37F}-\u{1FFF}\u{200C}-\u{200D}\u{203F}-\u{2040}\u{2070}-\u{218F}\u{2C00}-\u{2FEF}\u{3001}-\u{D7FF}\u{F900}-\u{FDCF}\u{FDF0}-\u{FFFD}\u{10000}-\u{EFFFF}]*$/u;
 
-    element.name = name.toLowerCase();
-    element.attributes = attributes;
-    element.children = children;
+const reserved_names = populate([
+    "annotation-xml",
+    "color-profile",
+    "font-face",
+    "font-face-src",
+    "font-face-uri",
+    "font-face-format",
+    "font-face-name",
+    "missing-glyph"
+]);
+
+function create(value) {
+    const name = value.toLowerCase();
+    if (
+        reserved_names[name] !== undefined ||
+        !(rg_element_name).test(name) ||
+        !(rg_custom_element_name).test(name)
+    ) {
+        throw new Error("Bad name");
+    }
+
+    const element = empty();
+
+    element.name = name;
+    element.attributes = empty();
+    element.children = [];
 
     element.valueOf = stringify(element);
 
