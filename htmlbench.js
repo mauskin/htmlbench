@@ -45,7 +45,7 @@ function stringify(node) {
         return `<${node.tagName}${attributes}>` + (
             void_elements[node.tagName]
             ? ""
-            : `\n${node.children.join("\n")}\n</${node.tagName}>`
+            : `${node.children.join()}</${node.tagName}>`
         );
     };
 }
@@ -57,7 +57,7 @@ function create(name) {
     const attributes = {};
     const children = [];
 
-    node.tagName = name;
+    node.tagName = name.toLowerCase();
     node.attributes = attributes;
     node.children = children;
 
