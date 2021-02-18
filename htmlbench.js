@@ -39,34 +39,37 @@ function stringify_atts(container) {
 
 // Turns an element into HTML string.
 
-function stringify(node) {
+function stringify(element) {
     return function () {
-        const attributes = stringify_atts(node.attributes);
-        return `<${node.tagName}${attributes}>` + (
-            void_elements[node.tagName]
+        const attributes = stringify_atts(element.attributes);
+        return `<${element.name}${attributes}>` + (
+            void_elements[element.name]
             ? ""
-            : `${node.children.join()}</${node.tagName}>`
+            : `${element.children.join()}</${element.name}>`
         );
     };
 }
 
-// Element instance constructor.
+// Normal HTML elements may contain ASCII alfanumerics and must not start with a
+// digit.
+
+const rg_element_name = /^[a-zA-Z][0-9a-zA-Z]/;
 
 function create(name) {
-    if (!(/^[a-zA-Z][0-9a-zA-Z]/).test(name)) {
+    if (!(rg_element_name).test(name)) {
         throw new Error("Bad symbols in the name");
     }
-    const node = empty();
+    const element = empty();
     const attributes = {};
     const children = [];
 
-    node.tagName = name.toLowerCase();
-    node.attributes = attributes;
-    node.children = children;
+    element.name = name.toLowerCase();
+    element.attributes = attributes;
+    element.children = children;
 
-    node.valueOf = stringify(node);
+    element.valueOf = stringify(element);
 
-    return Object.freeze(node);
+    return Object.freeze(element);
 }
 
 export default Object.freeze(create);
