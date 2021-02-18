@@ -1,4 +1,4 @@
-import JSCheck from "./jscheck.js";
+import jscheck from "./jscheck.js";
 import createElement from "./htmlbench.js";
 
 function empty() {
@@ -18,35 +18,43 @@ const void_elements = populate([
 ]);
 
 
-const jsc = JSCheck();
+const jsc = jscheck();
+
+const rg_start_tag = /^<[a-z][a-z0-9]*>/;
+const rg_end_tag = /<\/[a-z][a-z0-9]*>$/;
 
 jsc.claim(
-	"element name",
-	function (verdict, value) {
-		const rg_start_tag = /^<[a-z0-9]+>/;
-		const rg_end_tag = /<\/[a-z0-9]+>$/;
+    "element name",
+    function (verdict, value) {
 
-		const result = String(createElement(value));
+        let result;
+        try {
+            result = String(createElement(value));
+        } catch (ignore) {}
 
-		return verdict(
-			rg_start_tag.test(result) && 
-			(
-				void_elements[value.toLowerCase()] !== undefined ||
-				rg_end_tag.test(result)
-			)
-		);
-	},
-	jsc.string(
-		jsc.integer(1, 8),
-		jsc.wun_of([
-			jsc.character("a", "z"),
-			jsc.character("A", "Z"),
-			jsc.character("0", "9")
-		])
-	)
+        if (result === undefined) {
+            return verdict(true);
+        }
+
+        return verdict(
+            rg_start_tag.test(result) &&
+            (
+                void_elements[value.toLowerCase()] !== undefined ||
+                rg_end_tag.test(result)
+            )
+        );
+    },
+    jsc.string(
+        jsc.integer(1, 8),
+        jsc.wun_of([
+            jsc.character("a", "z"),
+            jsc.character("A", "Z"),
+            jsc.character("0", "9")
+        ])
+    )
 );
 
 jsc.check({
-	nr_trials: 100000,
-	on_report: console.log
+    nr_trials: 1000,
+    on_report: console.log
 });

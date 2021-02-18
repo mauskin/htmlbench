@@ -53,6 +53,9 @@ function stringify(node) {
 // Element instance constructor.
 
 function create(name) {
+    if (!(/^[a-zA-Z][0-9a-zA-Z]/).test(name)) {
+        throw new Error("Bad symbols in the name");
+    }
     const node = empty();
     const attributes = {};
     const children = [];
