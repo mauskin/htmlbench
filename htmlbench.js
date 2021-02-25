@@ -44,8 +44,8 @@ function stringify(element) {
         const attributes = stringify_atts(element.attributes);
         return `<${element.name}${attributes}>` + (
             element.children !== undefined
-            ? ""
-            : `${element.children.join()}</${element.name}>`
+            ? `${element.children.join()}</${element.name}>`
+            : ""
         );
     };
 }
