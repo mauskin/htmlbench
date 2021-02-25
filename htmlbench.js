@@ -22,7 +22,7 @@ const void_elements = populate([
     "param", "source", "track", "wbr"
 ]);
 
-// Turns an object holding attributes into an attributes string.
+// Turns object holding attributes into a string of attributes.
 
 function stringify_atts(container) {
     if (Object.keys(container).length === 0) {
