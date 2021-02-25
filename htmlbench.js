@@ -43,7 +43,7 @@ function stringify(element) {
     return function () {
         const attributes = stringify_atts(element.attributes);
         return `<${element.name}${attributes}>` + (
-            void_elements[element.name]
+            element.children !== undefined
             ? ""
             : `${element.children.join()}</${element.name}>`
         );
@@ -82,7 +82,10 @@ function create(value) {
 
     element.name = name;
     element.attributes = empty();
-    element.children = [];
+
+    if (void_elements[name] === undefined) {
+        element.children = [];
+    }
 
     element.valueOf = stringify(element);
 
