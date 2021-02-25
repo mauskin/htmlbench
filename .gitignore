@@ -1,2 +1,3 @@
 .DS_Store
-html-bench.sublime-workspace
+*.sublime-*
+test
