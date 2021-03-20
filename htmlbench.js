@@ -144,16 +144,16 @@ export default Object.freeze(function create(
         throw "Bad name.";
     }
 
-    const element = empty();
+    const element = {
+        name,
+        attributes: empty()
+    };
 
-    element.name = name;
-    element.attributes = empty();
+    element.toString = stringify(element);
 
     if (void_elements[name] === undefined) {
         element.children = [];
     }
-
-    element.valueOf = stringify(element);
 
     return Object.freeze(element);
 });
