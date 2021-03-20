@@ -14,7 +14,7 @@ all the usual tools to manipulate an object in JavaScript do apply. Assign it
 directly.
 
     meta_description.attributes.name = "description";
-    meta_description.attributes.content = "html-bench generates HTML elements.";
+    meta_description.attributes.content = "htmlbench generates HTML elements.";
 
 Or copy it from another object.
 
@@ -22,7 +22,7 @@ Or copy it from another object.
         meta_description.attributes,
         {
             name: "description",
-            content: "html-bench generates HTML elements."
+            content: "htmlbench generates HTML elements."
         }
     );
 
@@ -51,4 +51,4 @@ By that point it is clear that htmlbench elements lack any invented interface.
 Instead they rely on existing JavaScript objects. It would be fitting to not have
 a defined method to turn them to a string.
 
-    return String(meta_description); // <meta name="description" content="html-bench generates HTML elements.">
+    return String(meta_description); // <meta name="description" content="htmlbench generates HTML elements.">
