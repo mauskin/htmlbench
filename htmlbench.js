@@ -29,16 +29,25 @@ function populate(array, object = empty(), value = true) {
     return object;
 }
 
+// TODO(kirill): Check again if the list is full.
+const normal_elements = populate([
+    "a", "abbr", "address", "article", "aside", "audio", "b", "bdi", "bdo",
+    "blockquote", "body", "button", "canvas", "caption", "cite", "code",
+    "colgroup", "data", "datalist", "dd", "del", "details", "dfn", "dialog",
+    "div", "dl", "dt", "em", "fieldset", "figcaption", "figure", "footer",
+    "form", "head", "header", "hgroup", "html", "i", "iframe", "ins", "kbd",
+    "label", "legend", "li", "main", "map", "mark", "menu", "meter", "nav",
+    "noscript", "object", "ol", "optgroup", "option", "output", "p", "picture",
+    "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script",
+    "section", "select", "slot", "small", "span", "strong", "style", "summary",
+    "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead",
+    "time", "title", "tr", "u", "ul", "var", "video"
+]);
+
 const void_elements = populate([
     "area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta",
     "param", "source", "track", "wbr"
 ]);
-
-const lower_alfa = "a-z";
-const upper_alfa = "A-Z";
-const digit = "0-9";
-const alfa = lower_alfa + upper_alfa;
-const alfanumeric = alfa + digit;
 
 const space = "\u{0020}";
 const double_quote = "\u{0022}";
@@ -58,21 +67,6 @@ const noncharacter = [
     "\u{CFFFE}", "\u{CFFFF}", "\u{DFFFE}", "\u{DFFFF}", "\u{EFFFE}",
     "\u{EFFFF}", "\u{FFFFE}", "\u{FFFFF}"
 ].join();
-
-const rg_element_name = new RegExp(`^[${alfa}][${alfanumeric}]*$`, "u");
-
-const rg_custom_element_name = /^[a-z][\-.0-9_a-z\u{B7}\u{C0}-\u{D6}\u{D8}-\u{F6}\u{F8}-\u{37D}\u{37F}-\u{1FFF}\u{200C}-\u{200D}\u{203F}-\u{2040}\u{2070}-\u{218F}\u{2C00}-\u{2FEF}\u{3001}-\u{D7FF}\u{F900}-\u{FDCF}\u{FDF0}-\u{FFFD}\u{10000}-\u{EFFFF}]*$/u;
-
-const reserved_names = populate([
-    "annotation-xml",
-    "color-profile",
-    "font-face",
-    "font-face-src",
-    "font-face-uri",
-    "font-face-format",
-    "font-face-name",
-    "missing-glyph"
-]);
 
 const rg_attribute_name_donts = new RegExp(
     (
@@ -129,17 +123,13 @@ function stringify(element) {
     };
 }
 
-// Normal HTML elements may contain ASCII alfanumerics and must not start with a
-// digit.
-
 export default Object.freeze(function create(
     proposed_name
 ) {
     const name = proposed_name.toLowerCase();
     if (
-        reserved_names[name] !== undefined ||
-        !(rg_element_name).test(name) ||
-        !(rg_custom_element_name).test(name)
+        normal_elements[name] === undefined &&
+        void_elements[name] === undefined
     ) {
         throw "Bad name.";
     }
