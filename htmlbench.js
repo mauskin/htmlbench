@@ -108,17 +108,20 @@ function stringify(element) {
         }
 
         const escaped = element.children.map(function (child) {
-            return (
-                typeof child === "object"
-                ? child
-                : String(child).replaceAll(greater_than, "&gt;")
-            );
+            if (typeof child === "object") {
+                return child;
+            }
+
+            let result = String(child);
+            result = result.replaceAll(greater_than, "&gt;")
+            result = result.replaceAll(less_than, "&lt;")
+            return result;
         });
 
         return (
             start_tag +
             escaped.join() +
-            "</" + element.name + ">"
+            less_than + slash + element.name + greater_than
         );
     };
 }
