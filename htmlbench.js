@@ -139,7 +139,16 @@ export default Object.freeze(function create(
         attributes: empty()
     };
 
-    element.toString = stringify(element);
+    Object.defineProperty(
+        element,
+        "toString",
+        {
+            value: stringify(element),
+            enumerable: false,
+            configurable: false,
+            writable: false
+        }
+    );
 
     if (void_elements[name] === undefined) {
         element.children = [];
