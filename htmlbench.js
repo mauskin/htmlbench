@@ -121,7 +121,7 @@ function stringify(element) {
 
         return (
             start_tag +
-            escaped.join() +
+            escaped.join("") +
             less_than + slash + element.name + greater_than
         );
     };
